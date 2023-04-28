@@ -77,9 +77,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "No Class" : fund.masterList[0].class);
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(fund.masterList[0]);
 
-  const { salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
+  const { salesCharge, newSalesAmount, topUpAmount, isEpf: isFundEpf } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
-  const isEpf = fund.isEpf === "Yes";
+  const isEpf = isFundEpf === "Yes";
   const isEpfOnly = fund.isEpfOnly === "Yes";
   const isPrsDefault = fund.fundCode.includes("prsdefault");
   const isScheduled = fund.isScheduled === "Yes" && fund.isEpfOnly !== "Yes";
@@ -146,7 +146,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     },
     { label: PRODUCT_DETAILS.LABEL_RISK, title: fund.riskCategory },
     { label: PRODUCT_DETAILS.LABEL_SHARIAH_COMPLAINT, title: fund.isSyariah },
-    { label: PRODUCT_DETAILS.LABEL_EPF, title: filteredCurrency.isEpf },
+    { label: PRODUCT_DETAILS.LABEL_EPF, title: isFundEpf },
   ];
 
   const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;

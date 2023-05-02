@@ -91,7 +91,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   const { width } = Dimensions.get("window");
   const { principalHolder, jointHolder } = details!;
   const { accountDetails: currentAccountDetails, disabledSteps, transactionType } = newSales;
-  const { accountNo, bankDetails, fundType, isEpf } = currentAccountDetails;
+  const { accountNo, bankDetails, fundType, isEpf: isAccountEpf } = currentAccountDetails;
   const { incomeDistribution, isAllEpf, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails, personalDetails } = principal!;
   const { enableBankDetails } = personalDetails!;
@@ -327,7 +327,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   }
 
   const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
-  const checkEpf = isEpf === true ? "EPF" : "Cash";
+  const checkEpf = isAccountEpf === true ? "EPF" : "Cash";
   const tags = accountNo !== "" ? [getProductTagType(fundType), checkEpf] : [];
   const checkAccountNo = accountNo !== "" ? accountNo : null;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;

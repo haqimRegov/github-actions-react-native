@@ -112,7 +112,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
   const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
-  const { accountNo, ampDetails, fundType, isEpf } = accountDetails;
+  const { accountNo, ampDetails, fundType, isEpf: isAccountEpf } = accountDetails;
   const updatedRisk = riskInfo.appetite !== "" ? riskInfo : riskScore;
   const checkRangeOfReturn = riskInfo.expectedRange !== "" ? riskInfo.expectedRange : riskScore.rangeOfReturn;
 
@@ -192,7 +192,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
       const newState: IProductSales = {
         investment: {
           fundId: ampDetails.masterList[0].fundId,
-          fundPaymentMethod: ampDetails.isEpf === "Yes" ? "EPF" : "Cash",
+          fundPaymentMethod: ampDetails.isEpf === "Yes" ? "EPF" : "Cash", // update IProduct bcs of here
           investmentAmount: "",
           investmentSalesCharge: "",
           isTopup: false,
@@ -328,7 +328,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     height: sh24,
   };
 
-  const checkEpf = isEpf === true ? "EPF" : "Cash";
+  const checkEpf = isAccountEpf === true ? "EPF" : "Cash";
   const tags = accountNo !== "" ? [getProductTagType(fundType), checkEpf] : [];
   // const checkJointHeader = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
   const header = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_SALES : RISK_ASSESSMENT.NEW_SALES_HEADING_2;

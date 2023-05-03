@@ -192,7 +192,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
       const newState: IProductSales = {
         investment: {
           fundId: ampDetails.masterList[0].fundId,
-          fundPaymentMethod: ampDetails.isEpf === "Yes" ? "EPF" : "Cash", // update IProduct bcs of here
+          fundPaymentMethod: ampDetails.isEpf === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
           isTopup: false,

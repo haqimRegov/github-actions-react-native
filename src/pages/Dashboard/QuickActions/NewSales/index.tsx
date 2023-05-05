@@ -268,12 +268,14 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
           setErrorMessage(undefined);
           setInputError1(undefined);
           if (data.result.message === "NTB") {
-            if (client.isNewFundPurchase === true) {
-              setSalesNewPrompt(true);
-            }
             handleUpdateClientType("NTB");
+
             if (holderToFill === "principalHolder") {
-              setAccountTypePrompt(true);
+              if (client.isNewFundPurchase === true) {
+                setSalesNewPrompt(true);
+              } else {
+                setAccountTypePrompt(true);
+              }
             }
           }
 
@@ -463,30 +465,33 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
 
   const handleCancel = () => {
     if (prompt !== undefined) {
-      handleCancelNewSales();
-    } else if (registered === true) {
+      return handleCancelNewSales();
+    }
+    if (registered === true) {
       setRegistered(false);
       if (accountType === "Joint") {
-        setHolderToFill("jointHolder");
-      } else {
-        setAccountTypePrompt(true);
+        return setHolderToFill("jointHolder");
       }
-    } else if (salesNewPrompt === true) {
+      return setAccountTypePrompt(true);
+    }
+    if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
       setHolderToFill("principalHolder");
-      setClientType({ ...clientTypeInitialValue });
-    } else if (clientType.joint !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
-      setAccountTypePrompt(true);
-    } else if (accountTypePrompt === true) {
+      return setClientType({ ...clientTypeInitialValue });
+    }
+    if (clientType.joint !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
+      return setAccountTypePrompt(true);
+    }
+    if (accountTypePrompt === true) {
       setHolderToFill("principalHolder");
       setAccountTypePrompt(false);
-      setClientType({ ...clientTypeInitialValue });
-    } else if (clientType.principal !== "" && holderToFill === "principalHolder") {
-      setClientType({ ...clientTypeInitialValue });
-      addAccountType("Individual");
-    } else {
-      handleCancelNewSales();
+      return setClientType({ ...clientTypeInitialValue });
     }
+    if (clientType.principal !== "" && holderToFill === "principalHolder") {
+      setClientType({ ...clientTypeInitialValue });
+      return addAccountType("Individual");
+    }
+    return handleCancelNewSales();
   };
 
   const handleContinue = async () => {

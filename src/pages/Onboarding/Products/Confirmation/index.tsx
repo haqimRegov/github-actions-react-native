@@ -14,7 +14,7 @@ import {
 } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../../data/dictionary";
-import { useDelete } from "../../../../hooks";
+import { IData, useUndoDelete } from "../../../../hooks";
 import { IcoMoon } from "../../../../icons";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import {
@@ -93,8 +93,25 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
   const flatListRef = useRef<FlatList | null>(null);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
-  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const handleUpdateInvestment = (value: IData<IProductSales>[] | undefined) => {
+    if (value !== undefined) {
+      const restoredDetails = investmentDetails !== undefined ? [...investmentDetails] : [];
+      // restore investment details
+      // last item item added will be the first item to undo, LIFO
+      value.reverse().forEach((item) => {
+        restoredDetails.splice(item.index, 0, item.deletedData);
+      });
+      setInvestmentDetails(restoredDetails);
+
+      // restore fund details
+      const updatedProducts = restoredDetails!.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
+      setSelectedFund(updatedProducts);
+    }
+  };
+
+  const [deleteCount, setDeleteCount, tempData, setTempData, handleUndoDelete] = useUndoDelete<IProductSales>(handleUpdateInvestment);
 
   const handleConfirmIdentity = () => {
     const epfInvestments = investmentDetails!
@@ -198,10 +215,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
 
-    if (deleteCount !== 0 && tempData !== undefined && tempData.length > 1) {
-      setInvestmentDetails(tempData);
-    }
-
     // TODO dynamic change for EP and Bank Currency
     const route: TypeOnboardingKey = finishedSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);
@@ -216,12 +229,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     if (flatListRef.current !== null && findIndex !== -1) {
       flatListRef.current?.scrollToIndex({ animated: true, index: findIndex, viewPosition: 0 });
     }
-  };
-
-  const handleUndoDelete = () => {
-    const updatedProducts = investmentDetails!.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
-    setSelectedFund(updatedProducts);
-    setTempData(investmentDetails!);
   };
 
   const handleCancelDelete = () => {
@@ -266,7 +273,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   useEffect(() => {
     const updatedProducts = investmentDetails!.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
     setSelectedFund(updatedProducts);
-    setTempData(investmentDetails!);
     if (investmentDetails?.length === 0) {
       handleNextStep("ProductsList");
     }
@@ -295,7 +301,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const lastFundName = tempData !== undefined && tempData.length > 0 && tempData !== undefined ? tempData[0].fundDetails.fundName : "";
+  const lastFundName =
+    investmentDetails !== undefined && investmentDetails.length > 0 && investmentDetails !== undefined
+      ? investmentDetails[0].fundDetails.fundName
+      : "";
   const checkRecurring = investmentDetails
     ?.map((eachInvestment: IProductSales) => eachInvestment.investment.scheduledInvestment)
     .includes(true);
@@ -320,7 +329,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       <SafeAreaPage>
         <View style={{ ...px(sw16), ...flexChild }}>
           <FlatList
-            data={tempData}
+            data={investmentDetails}
             keyboardShouldPersistTaps="handled"
             keyExtractor={(item: IProductSales) => item.fundDetails.fundCode}
             ListHeaderComponent={
@@ -378,11 +387,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             renderItem={({ item, index }) => {
               const { fundName, issuingHouse } = item.fundDetails;
               // const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
-              const newData = tempData !== undefined ? [...tempData] : [];
+              const newData = investmentDetails !== undefined ? [...investmentDetails] : [];
 
               const handleDelete = () => {
-                if (tempData !== undefined && tempData.length > 1) {
-                  let updatedDetails = [...tempData];
+                if (investmentDetails !== undefined && investmentDetails.length > 1) {
+                  let updatedDetails = [...investmentDetails];
                   updatedDetails.splice(index, 1);
                   if (multiUtmc === false) {
                     const findEpfIndex = updatedDetails.findIndex(
@@ -396,9 +405,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       };
                     });
                   }
-                  setTempData(updatedDetails);
                   const updatedProducts = updatedDetails.map((eachTempInvestment: IProductSales) => eachTempInvestment.fundDetails);
                   setSelectedFund(updatedProducts);
+                  const updatedTemp = tempData !== undefined ? tempData : [];
+                  setTempData([...updatedTemp, { index: index, deletedData: investmentDetails[index] }]);
+                  setInvestmentDetails(updatedDetails);
                   setDeleteCount(deleteCount + 1);
                 } else {
                   setShowModal(true);

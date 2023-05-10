@@ -2,8 +2,9 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomToast } from "../../../components";
 import { Language } from "../../../constants";
+import { IData, useUndoDelete } from "../../../hooks";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
@@ -107,8 +108,8 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const handleToast = (value?: string) => {
-    updateOnboardingToast(`${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`);
+  const handleToast = (text?: string | undefined) => {
+    updateOnboardingToast(text);
   };
 
   const handleBankSummary = (updatedBankSummary: IBankSummaryState) => {
@@ -123,6 +124,34 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       },
     });
   };
+
+  const handleUpdateTempData = (value: IData<IBankDetailsState>[] | undefined) => {
+    // last item item added will be the first item to undo, LIFO
+    if (value !== undefined) {
+      const updatedForeignBank = foreignBank !== undefined ? [...foreignBank] : [];
+      value.reverse().forEach((item) => {
+        updatedForeignBank.splice(item.index, 0, item.deletedData);
+      });
+      setForeignBank(updatedForeignBank);
+    }
+  };
+
+  const [deleteCount, setDeleteCount, tempData, setTempData, handleUndoDelete] = useUndoDelete<IBankDetailsState>(handleUpdateTempData);
+  const useDeleteData = {
+    deleteCount: deleteCount,
+    setDeleteCount: setDeleteCount,
+    setTempData: setTempData,
+    tempData: tempData,
+  };
+
+  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+
+  if (accountType === "Joint") {
+    accountNames.push(
+      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
+      { label: ADDITIONAL_DETAILS.OPTION_COMBINED, value: ADDITIONAL_DETAILS.OPTION_COMBINED },
+    );
+  }
 
   const nonMyrCurrencies = investmentCurrencies.filter((currency) => currency !== "MYR");
   const selectedNonMyrCurrencies = isNotEmpty(foreignBank)
@@ -193,6 +222,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
           <BankDetails
             accountType={accountType!}
             bankSummary={bankSummary!}
+            useDeleteData={useDeleteData}
             details={details!}
             enableBank={enableBankDetails!}
             foreignBankDetails={foreignBank!}
@@ -207,6 +237,13 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
           />
         </View>
       </ContentPage>
+      <CustomToast
+        count={deleteCount}
+        deleteText={ADDITIONAL_DETAILS.LABEL_BANK_DELETED}
+        isDeleteToast={true}
+        onPress={handleUndoDelete}
+        setCount={setDeleteCount}
+      />
     </Fragment>
   );
 };

@@ -1,10 +1,11 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, CustomToast, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
+import { IData, useUndoDelete } from "../../../hooks";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { BankDetails, EPFDetails } from "../../../templates";
@@ -205,11 +206,31 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     });
   };
 
-  const handleToast = (value?: string) => {
+  const handleToast = (text?: string) => {
     updateNewSales({
       ...newSales,
-      toast: `${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`,
+      toast: text,
     });
+  };
+
+  const handleUpdateTempData = (value: IData<IBankDetailsState>[] | undefined) => {
+    // last item item added will be the first item to undo, LIFO
+    if (value !== undefined) {
+      const updatedForeignBank = foreignBank !== undefined ? [...foreignBank] : [];
+      value.reverse().forEach((item) => {
+        updatedForeignBank.splice(item.index, 0, item.deletedData);
+      });
+      handleForeignBank(updatedForeignBank);
+    }
+  };
+
+  const [deleteCount, setDeleteCount, tempData, setTempData, handleUndoDelete] = useUndoDelete<IBankDetailsState>(handleUpdateTempData);
+
+  const useDeleteData = {
+    deleteCount: deleteCount,
+    setDeleteCount: setDeleteCount,
+    setTempData: setTempData,
+    tempData: tempData,
   };
 
   const investmentCurrencies = productSales!.map(({ investment }) =>
@@ -305,6 +326,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           <BankDetails
             accountType={accountType!}
             bankSummary={bankSummary!}
+            useDeleteData={useDeleteData}
             details={details!}
             enableBank={enableBankDetails!}
             existingBankSummary={existingBankDetails}
@@ -314,7 +336,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
             handleBankSummary={handleBankSummary}
             handleEnableLocalBank={handleEnableLocalBank}
             localBankDetails={localBank!}
-            // remainingCurrencies={checkCurrencyRemaining}
             handleToast={handleToast}
             setForeignBankDetails={handleForeignBank}
             setLocalBankDetails={handleLocalBank}
@@ -335,6 +356,13 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           ) : null}
         </View>
       </ContentPage>
+      <CustomToast
+        count={deleteCount}
+        deleteText={ADDITIONAL_DETAILS.LABEL_BANK_DELETED}
+        isDeleteToast={true}
+        onPress={handleUndoDelete}
+        setCount={setDeleteCount}
+      />
     </Fragment>
   );
 };

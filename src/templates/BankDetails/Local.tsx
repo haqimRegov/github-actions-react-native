@@ -31,59 +31,49 @@ import {
 } from "../../styles";
 import { checkLocalBankPartial, getInitialBankState, isNonNumber, isNotEmpty, isNumber } from "../../utils";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { PERSONAL_DETAILS, ADDITIONAL_DETAILS } = Language.PAGE;
 
 interface ILocalBankDetailsProps {
   accountType: TypeAccountChoices;
   addCurrencyDisabled: boolean;
   addDisabled: boolean;
   bankingDetails: IBankDetailsState[];
-  bankSummary: IBankSummaryState;
   bankNames: TypeLabelValue[];
-  // deleteCount: number;
+  bankSummary: IBankSummaryState;
   enableBank: boolean;
   existingDetails?: IBankDetailsState[];
   handleEnableLocalBank: (enable: boolean) => void;
+  handleToast: (text?: string) => void;
   initialForeignBankState: IBankDetailsState;
   investmentCurrencies: string[];
   isAllEpf: boolean;
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
-  handleToast: (value?: string) => void;
-  // setDeleteCount: (count: number) => void;
   setForeignBankDetails: (input: IBankDetailsState[]) => void;
-  // setTempData: (updatedBankSummary: IBankSummaryState) => void;
 }
 
 export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
+  // investmentCurrencies,
   accountType,
   addCurrencyDisabled,
   addDisabled,
   bankingDetails,
-  bankSummary,
   bankNames,
-  // currentCurrency,
-  // deleteCount,
-  // enableBank,
+  bankSummary,
   existingDetails,
-  // handleEnableLocalBank,
+  handleToast,
   initialForeignBankState,
-  // investmentCurrencies,
   isAllEpf,
   remainingCurrencies,
   setBankingDetails,
-  handleToast,
-  // setDeleteCount,
   setForeignBankDetails,
-}: // setTempData,
-ILocalBankDetailsProps) => {
+}: ILocalBankDetailsProps) => {
   const { foreignBank } = bankSummary;
 
   const handleAddForeignBank = () => {
     const bankingDetailsClone = [...foreignBank!];
     const addCurrency = remainingCurrencies.length === 1 ? { currency: [...remainingCurrencies] } : {};
     bankingDetailsClone.push({ ...initialForeignBankState, ...addCurrency });
-    // setTempData({ ...bankSummary, foreignBank: bankingDetailsClone });
     setForeignBankDetails(bankingDetailsClone);
   };
 
@@ -214,9 +204,7 @@ ILocalBankDetailsProps) => {
                           updatedCurrency.splice(currencyIndex + 1, 1);
                           const updatedData = { ...item, currency: updatedCurrency };
                           setBankingDetails([updatedData]);
-                          handleToast(value);
-                          // setTempData({ ...bankSummary, localBank: [updatedData] });
-                          // setDeleteCount(deleteCount + 1);
+                          handleToast(`${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`);
                         };
 
                         const handleOtherCurrency = (input: string) => {

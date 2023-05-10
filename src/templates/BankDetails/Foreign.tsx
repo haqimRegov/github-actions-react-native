@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { View } from "react-native";
 
 import {
@@ -15,6 +15,7 @@ import {
 } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, ERROR } from "../../data/dictionary";
+import { IData } from "../../hooks";
 import {
   alignFlexStart,
   borderBottomGray2,
@@ -35,7 +36,7 @@ import {
 } from "../../styles";
 import { isNonNumber, isNumber } from "../../utils";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { PERSONAL_DETAILS, ADDITIONAL_DETAILS } = Language.PAGE;
 
 interface IForeignBankDetailsProps {
   accountType: TypeAccountChoices;
@@ -44,15 +45,16 @@ interface IForeignBankDetailsProps {
   bankingDetails: IBankDetailsState[];
   bankNames: TypeLabelValue[];
   bankSummary: IBankSummaryState;
-  // deleteCount: number;
+  deleteCount: number;
   existingDetails?: IBankDetailsState[];
+  handleToast: (text?: string) => void;
   initialForeignBankState: IBankDetailsState;
   investmentCurrencies: string[];
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
-  handleToast: (value?: string) => void;
-  // setDeleteCount: (count: number) => void;
-  // setTempData: (updatedDetails: IBankSummaryState) => void;
+  setDeleteCount: (count: number) => void;
+  setTempData: (newData: IData<IBankDetailsState>[]) => void;
+  tempData: IData<IBankDetailsState>[] | undefined;
 }
 
 interface IPromptDetails {
@@ -61,38 +63,38 @@ interface IPromptDetails {
 }
 
 export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = ({
+  // investmentCurrencies,
   accountType,
   addCurrencyDisabled,
   addDisabled,
   bankingDetails,
   bankNames,
-  // bankSummary,
-  // currentCurrency,
-  // deleteCount,
+  deleteCount,
   existingDetails,
+  handleToast,
   initialForeignBankState,
-  // investmentCurrencies,
   remainingCurrencies,
   setBankingDetails,
-  handleToast,
-}: // setDeleteCount,
-// setTempData,
-IForeignBankDetailsProps) => {
+  setDeleteCount,
+  setTempData,
+  tempData,
+}: IForeignBankDetailsProps) => {
   const [promptModal, setPromptModal] = useState<boolean>(false);
   const [promptDetails, setPromptDetails] = useState<IPromptDetails>({ title: "", index: 0 });
   const handleAddForeignBank = () => {
     const bankingDetailsClone = [...bankingDetails];
     const addCurrency = remainingCurrencies.length === 1 ? { currency: [...remainingCurrencies] } : {};
     bankingDetailsClone.push({ ...initialForeignBankState, ...addCurrency });
-    // setTempData({ ...bankSummary, foreignBank: bankingDetailsClone });
     setBankingDetails(bankingDetailsClone);
   };
 
   const handleDelete = () => {
     const updatedBankingDetails = [...bankingDetails];
     updatedBankingDetails.splice(promptDetails.index, 1);
-    // setTempData({ ...bankSummary, foreignBank: updatedBankingDetails });
+    const updatedTemp = tempData !== undefined ? [...tempData] : [];
+    setTempData([...updatedTemp, { deletedData: bankingDetails[promptDetails.index], index: promptDetails.index }]);
     setBankingDetails(updatedBankingDetails);
+    setDeleteCount(deleteCount + 1);
   };
 
   const handleCancel = () => {
@@ -230,10 +232,8 @@ IForeignBankDetailsProps) => {
                           updatedData = { ...updatedData, currency: updatedCurrency };
                           updatedBankingDetails[index] = updatedData;
                         }
-                        // setDeleteCount(deleteCount + 1);
                         setBankingDetails(updatedBankingDetails);
-                        handleToast(value);
-                        // setTempData({ ...bankSummary, foreignBank: updatedBankingDetails });
+                        handleToast(`${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`);
                       };
 
                       const label =

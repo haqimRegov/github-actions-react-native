@@ -84,7 +84,7 @@ interface PaymentInfoProps {
   ctaDetails?: TypeCTADetails[];
   currencies: TypeCurrencyLabelValue[];
   currentPayments: IPaymentInfo[];
-  deletedPayment: IPaymentInfo[];
+  // deletedPayment: IPaymentInfo[];
   epfAccountNumber?: string;
   existingPaidAmount: IOrderAmount[];
   funds: IOrderInvestment[];

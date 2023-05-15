@@ -1373,6 +1373,7 @@ const productList = gql`
             fundCategory
             issuingHouse
             riskCategory
+            isEpf
             isEpfOnly
             isSyariah
             isWholesale

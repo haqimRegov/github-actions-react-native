@@ -536,7 +536,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const updatedInvestmentDetails: IProductSales[] = investmentDetails!.map((eachDetails: IProductSales) => {
       const checkData =
         findEpfIndex !== -1 ? eachDetails.fundDetails.issuingHouse === investmentDetails![findEpfIndex].fundDetails.issuingHouse : true;
-      const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
+      const checkMultipleUtmc =
+        multiUtmc === true && eachDetails.fundDetails.masterList.map((eachMaster) => eachMaster.isEpf).includes("Yes") ? true : checkData;
       const checkEpf = isAccountEpf === true ? "EPF" : "Cash";
       const checkNewFundPurchase = isAccountEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
       const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : checkNewFundPurchase;

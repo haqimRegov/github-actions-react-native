@@ -165,7 +165,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         },
         fundDetails: { ...item },
         masterClassList: newMasterClassList,
-        isNewFund: true,
+        isNewFund:
+          investmentDetails !== undefined && findExistingInvestment !== -1 ? investmentDetails[findExistingInvestment].isNewFund : true,
       };
 
       return initialStateArray.push(newState);

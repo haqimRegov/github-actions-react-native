@@ -1,0 +1,117 @@
+name: NodeJS Github Actions 
+
+on: 
+  push:
+    branches: 
+      - main
+      - develop
+      - staging
+      - Pre-production
+      - DEV
+
+  pull_request: 
+    branches: 
+      - main
+      - develop
+      - staging
+      - Pre-production
+      - DEV
+
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Run test 
+        run: npm test
+      - name: Test prompt 
+        run: echo "test has been executed"
+      
+  sonarqube:
+    name: Sonarqube scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+      - name: Setup Sonarcloud
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_EC2_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  DeployDev:
+    name: Deploy to DEV Environment
+    if: github.event_name == 'pull_request' && success()
+    needs: [sonarqube,build-and-test]
+    runs-on: ubuntu-latest
+    environment:
+      name: DEV
+      url: "http://dev.Reach.com"
+    steps:
+      - name: Deploy
+        run: echo "Deploying to DEV Environment"
+        #This is where the deployment phase should be coded
+
+  DeploySIT:
+    name: Deploy to SIT Environment
+    if: github.event.ref == 'refs/heads/DEV'
+    needs: [sonarqube,build-and-test]
+    runs-on: ubuntu-latest
+    environment:
+      name: develop
+      url: "http://SIT.Reach.com"
+    steps:
+      - name: Deploy
+        run: echo "Deploying to SIT Environment"
+        #This is where the deployment phase should be coded
+
+  DeployStaging:
+    name: Deploy to Staging Environment
+    if: github.event.ref == 'refs/heads/DEV'
+    needs: [DeploySIT]
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: "http://Staging.Reach.com"
+    steps:
+      - name: Deploy
+        run: echo "Deploying to Staging Environment"
+        #This is where the deployment phase should be coded
+
+  DeployPre-prodution:
+    name: Deploy to Pre-prod Environment
+    if: github.event.ref == 'refs/heads/DEV'
+    needs: [DeployStaging]
+    runs-on: ubuntu-latest
+    environment:
+      name: Pre-production
+      url: "http://Pre-prod.Reach.com"
+    steps:
+      - name: Deploy
+        run: echo "Deploying to Pre-prod Environment"
+        #This is where the deployment phase should be coded\
+      
+  DeployMaster:
+    name: Deploy to Master Environment
+    if: github.event.ref == 'refs/heads/DEV'
+    needs: [DeployPre-prodution]
+    runs-on: ubuntu-latest
+    environment:
+      name: master
+      url: "http://www.Reach.com"
+    steps:
+      - name: Deploy
+        run: echo "Deploying to Production Environment"
+        #This is where the deployment phase should be coded
+

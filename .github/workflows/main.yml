@@ -67,9 +67,9 @@ jobs:
       - name: Setup Sonarcloud
         uses: sonarsource/sonarqube-scan-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          GITHUB_TOKEN: ${{secrets.TOKEN_GITHUB}}  
+          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+          SONAR_HOST_URL: ${{secrets.SONAR_HOST_URL}}
 
 
   DeployDev:
